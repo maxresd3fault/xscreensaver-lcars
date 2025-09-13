@@ -1,0 +1,18 @@
+#!/bin/sh
+
+cleanup() {
+    echo "Cleaning up..."
+    killall lcars-bin
+    pkill -f 'zenity --no-markup --question --title Ruffle'
+}
+
+# Trap signals after the function is defined
+trap cleanup EXIT
+
+# Run lcars-bin in background and save its PID
+/usr/lib/xscreensaver/lcars-bin > $HOME/.lcars-log 2>&1 &
+LCARS_PID=$!
+
+# Wait so the script stays alive and can handle signals
+wait "$LCARS_PID"
+
